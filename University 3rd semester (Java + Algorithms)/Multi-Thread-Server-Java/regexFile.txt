@@ -1,0 +1,10 @@
+[A-Z], Common A-Z Regex, 0, 1
+[a-z], Common a-z Regex, 0, 2
+[a-z]{1,3}, Small letters 3 letters, 0, 3
+[^a-z]{1,5}, Regex, 0, 4
+[1-9]{1,5}, Numbers Regex, 0, 5
+[A-Za-z], Every letter Regex, 0, 6
+[^a-z], No small letter symbol, 0, 7
+[^A-Z], No capital letter symbol, 0, 8
+[^1-9], No numbers symbol, 0, 9
+[^A-Za-z], No letters symbol, 0, 10

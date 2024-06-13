@@ -1,0 +1,73 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "ServerMain",
+      "request": "launch",
+      "mainClass": "ServerMain",
+      "projectName": "Multi-Thread-Server-Java_d44f8c5c"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Client",
+      "projectName": "Multi-Thread-Server-Java_d44f8c5c"
+    },
+    {
+      "type": "java",
+      "name": "ServerMain",
+      "request": "launch",
+      "mainClass": "ServerMain",
+      "projectName": "MultiThreadServer_6ef5d6a7"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Client",
+      "projectName": "MultiThreadServer_6ef5d6a7"
+    },
+    {
+      "type": "java",
+      "name": "ServerMain",
+      "request": "launch",
+      "mainClass": "ServerMain",
+      "projectName": "Upr_PNPE_dbc7b87a"
+    },
+    {
+      "type": "java",
+      "name": "Client",
+      "request": "launch",
+      "mainClass": "Client",
+      "projectName": "Upr_PNPE_dbc7b87a"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "Upr_PNPE_dbc7b87a"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/Vladislav Atanassov/Documents/Upr_PNPE",
+      "program": "c:/Users/Vladislav Atanassov/Documents/Upr_PNPE/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
