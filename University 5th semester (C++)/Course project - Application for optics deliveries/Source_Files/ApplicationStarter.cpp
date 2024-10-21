@@ -1,4 +1,4 @@
-#include "C:\Users\Vladislav Atanassov\Documents\Programming in university\University 5th semester (C++)\Course project - Application for optics deliveries\Header_files\ApplicationStarter.h"
+#include "your_path_to_directoryApplicationStarter.h"
 
 void ApplicationStarter::testInput(OrderSystem& orderSystem)
 {
