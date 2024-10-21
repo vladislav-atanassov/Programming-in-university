@@ -1,4 +1,4 @@
-#include "C:\Users\Vladislav Atanassov\Documents\Programming in university\University 5th semester (C++)\Course project - Application for optics deliveries\Header_files\Optics.h"
+#include "your_path_to_directoryOptics.h"
 
 std::ostream& operator<<(std::ostream& os, const Optics& optics)
 {
