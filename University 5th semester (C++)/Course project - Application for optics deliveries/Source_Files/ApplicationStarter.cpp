@@ -30,7 +30,10 @@ void ApplicationStarter::mainMenu(InputHandler& ioHandler, OrderSystem& orderSys
 
     while(true) 
     {
-        std::cout << "1. Add Deliverer\n2. Add Optics To Deliverer\n3. Place Order\n4. Exit\n";
+        std::cout << "1. Add Deliverer" << std::endl;
+        std::cout << "2. Add Optics To Deliverer" << std::endl;
+        std::cout << "3. Place Order" << std::endl;
+        std::cout << "4. Exit" << std::endl;
         std::cout << "Choose one of the options: ";
         int choice;
         std::cin >> choice;

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/Vladislav Atanassov/Documents/Programming in university/University 5th semester (C++)/Course project - Application for optics deliveries/Source_Files",
+      "program": "c:/Users/Vladislav Atanassov/Documents/Programming in university/University 5th semester (C++)/Course project - Application for optics deliveries/Source_Files/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
