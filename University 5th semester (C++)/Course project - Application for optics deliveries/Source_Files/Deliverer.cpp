@@ -1,4 +1,4 @@
-#include "C:\Users\Vladislav Atanassov\Documents\Programming in university\University 5th semester (C++)\Course project - Application for optics deliveries\Header_files\Deliverer.h"
+#include "../Header_files/Deliverer.h"
 
 std::ostream& operator<<(std::ostream& os, const Deliverer& deliverer)
 {

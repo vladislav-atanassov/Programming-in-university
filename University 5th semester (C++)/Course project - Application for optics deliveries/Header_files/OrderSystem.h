@@ -11,8 +11,8 @@
 class OrderSystem 
 {
 private:
-    const std::string ordersLogFileName = "C:\\Users\\Vladislav Atanassov\\Documents\\Programming in university\\University 5th semester (C++)\\Course project - Application for optics deliveries\\Log_Files\\ordersLogFile.txt";
-    const std::string deliverersLogFileName = "C:\\Users\\Vladislav Atanassov\\Documents\\Programming in university\\University 5th semester (C++)\\Course project - Application for optics deliveries\\Log_Files\\deliverersLogFile.txt";
+    const std::string ordersLogFileName = "../Log_files/ordersLogFile.txt";
+    const std::string deliverersLogFileName = "../Log_files/deliverersLogFile.txt";
 
     std::vector<Deliverer> deliverers;
 

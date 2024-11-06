@@ -1,4 +1,4 @@
-#include "C:\Users\Vladislav Atanassov\Documents\Programming in university\University 5th semester (C++)\Course project - Application for optics deliveries\Header_files\InputHandler.h"
+#include "../Header_files/InputHandler.h"
 
 Optics InputHandler::inputNewOptics()
 {
