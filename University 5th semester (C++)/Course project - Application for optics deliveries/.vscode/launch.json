@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Vladislav Atanassov/Documents/Programming in university/University 5th semester (C++)/Course project - Application for optics deliveries/Header_files",
-      "program": "c:/Users/Vladislav Atanassov/Documents/Programming in university/University 5th semester (C++)/Course project - Application for optics deliveries/Header_files/build/Debug/outDebug",
+      "cwd": "c:/Users/Vladislav Atanassov/Documents/Programming in university/University 5th semester (C++)/Course project - Application for optics deliveries/src",
+      "program": "c:/Users/Vladislav Atanassov/Documents/Programming in university/University 5th semester (C++)/Course project - Application for optics deliveries/src/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
