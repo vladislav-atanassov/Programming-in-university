@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../inc\ApplicationStarter.h"
+#include "../inc/ApplicationStarter.h"
 
 int main() 
 {

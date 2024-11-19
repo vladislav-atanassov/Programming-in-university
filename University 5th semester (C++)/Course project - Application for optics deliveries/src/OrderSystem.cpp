@@ -18,7 +18,7 @@ void OrderSystem::saveDelivererToFile(const Deliverer& deliverer) const
 {
     std::ofstream outFile(deliverersLogFileName, std::ios::app);
     
-    if (!outFile) 
+    if(!outFile) 
     {
         std::cerr << "Error opening file: " << deliverersLogFileName << std::endl;
         return;
