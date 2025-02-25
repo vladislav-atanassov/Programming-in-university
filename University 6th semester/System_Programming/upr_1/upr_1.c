@@ -1006,22 +1006,22 @@ void numbers_identificator(char *buffer)
 }
 
 // Linux specific
-void read_file(int file_d, char **buffer, )
+void read_file(int file_d, char **buffer, size_t *buffer_size)
 {
- = lseek(file_d, 0, SEEK_END); // Get file size
-     == (size_t)-1)
+    *buffer_size = lseek(file_d, 0, SEEK_END); // Get file size
+    if (*buffer_size == (size_t)-1)
     {
         perror("lseek failed");
         return;
     }
 
-     == 0)
+    if (*buffer_size == 0)
     {
         fprintf(stderr, "File is empty\n");
         return;
     }
 
-    *buffer = mmap(NULL + 1, PROT_READ, MAP_PRIVATE, file_d, 0);
+    *buffer = mmap(NULL, *buffer_size + 1, PROT_READ, MAP_PRIVATE, file_d, 0);
 
     if (*buffer == MAP_FAILED)
     {
