@@ -196,7 +196,7 @@ int is_hex_prefix(char ch)
     return ((ch == 'x') || (ch == 'X'));
 }
 
-void numbers_identificator(char *buffer, size_t buffer_size)
+void numbers_identificator(char *buffer)
 {
     int curr_state = START_STATE;
     int i = 0;
@@ -1006,22 +1006,22 @@ void numbers_identificator(char *buffer, size_t buffer_size)
 }
 
 // Linux specific
-void read_file(int file_d, char **buffer, size_t *buffer_size)
+void read_file(int file_d, char **buffer, )
 {
-    *buffer_size = lseek(file_d, 0, SEEK_END); // Get file size
-    if (*buffer_size == (size_t)-1)
+ = lseek(file_d, 0, SEEK_END); // Get file size
+     == (size_t)-1)
     {
         perror("lseek failed");
         return;
     }
 
-    if (*buffer_size == 0)
+     == 0)
     {
         fprintf(stderr, "File is empty\n");
         return;
     }
 
-    *buffer = mmap(NULL, *buffer_size + 1, PROT_READ, MAP_PRIVATE, file_d, 0);
+    *buffer = mmap(NULL + 1, PROT_READ, MAP_PRIVATE, file_d, 0);
 
     if (*buffer == MAP_FAILED)
     {
@@ -1059,7 +1059,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    numbers_identificator(file_content, file_size);
+    numbers_identificator(file_content);
 
     munmap(file_content, file_size);
     close(file_d);
