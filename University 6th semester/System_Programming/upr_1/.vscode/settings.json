@@ -64,5 +64,8 @@
     "errno.h": "c",
     "iostream": "cpp",
     "stdio.h": "c"
+  },
+  "[m68k]": {
+    "editor.rulers": []
   }
 }
