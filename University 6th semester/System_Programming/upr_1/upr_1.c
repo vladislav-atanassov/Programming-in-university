@@ -27,7 +27,9 @@
 #define S_C_L_SUFFIX_STATE 16
 #define U_C_L_SUFFIX_STATE 17
 #define L_C_L_SUFFIX_STATE 18
+#define S_L_L_SUFFIX_STATE 71
 #define OCTAL_STATE 19
+#define HEX_PREFIX 72
 #define HEX_STATE 20
 #define DOUBLE_STATE 21
 #define F_SUFFIX_STATE 22
@@ -210,10 +212,9 @@ void numbers_identificator(char *buffer)
 
             break;
         case IN_WORD_STATE:
+            // printf("Current state: IN_WORD_STATE.\t\tCurrent char: %c\n", buffer[i]);
             increment_type_count();
             reset_type_count();
-
-            // printf("Current state: IN_WORD_STATE.\t\tCurrent char: %c\n", buffer[i]);
 
             if (is_delimiter(buffer[i]))
             {
@@ -253,7 +254,6 @@ void numbers_identificator(char *buffer)
             break;
         case ERROR_STATE:
             // printf("Current state: ERROR_STATE.\t\tCurrent char: %c\n", buffer[i]);
-
             reset_type_count();
 
             if (is_delimiter(buffer[i]))
@@ -292,7 +292,6 @@ void numbers_identificator(char *buffer)
 
         case PLUS_SIGN_STATE:
             // printf("Current state: PLUS_SIGN_STATE.\t\tCurrent char: %c\n", buffer[i]);
-
             if (buffer[i] == '0')
             {
                 curr_state = P_ZERO_STATE;
@@ -319,7 +318,6 @@ void numbers_identificator(char *buffer)
             break;
         case MINUS_SIGN_STATE:
             // printf("Current state: MINUS_SIGN_STATE.\t\tCurrent char: %c\n", buffer[i]);
-
             if (buffer[i] == '0')
             {
                 curr_state = M_ZERO_STATE;
@@ -356,10 +354,6 @@ void numbers_identificator(char *buffer)
             else if (is_exponent(buffer[i]))
             {
                 curr_state = EXPONENT_STATE;
-            }
-            else if (is_digit(buffer[i]))
-            {
-                curr_state = ZERO_START_R_N;
             }
             else if (is_small_long_suffix(buffer[i]))
             {
@@ -402,17 +396,13 @@ void numbers_identificator(char *buffer)
             {
                 curr_state = EXPONENT_STATE;
             }
-            else if (is_digit(buffer[i]))
-            {
-                curr_state = ZERO_START_R_N;
-            }
             else if (is_small_long_suffix(buffer[i]))
             {
-                curr_state = U_S_L_SUFFIX_STATE;
+                curr_state = S_S_L_SUFFIX_STATE;
             }
             else if (is_capital_long_suffix(buffer[i]))
             {
-                curr_state = U_C_L_SUFFIX_STATE;
+                curr_state = S_C_L_SUFFIX_STATE;
             }
             else if (buffer[i] == END_OF_BUFFER)
             {
@@ -437,15 +427,11 @@ void numbers_identificator(char *buffer)
             }
             else if (is_hex_prefix(buffer[i]))
             {
-                curr_state = HEX_STATE;
+                curr_state = HEX_PREFIX;
             }
             else if (is_octal_const(buffer[i]))
             {
                 curr_state = OCTAL_STATE;
-            }
-            else if (is_digit(buffer[i]))
-            {
-                curr_state = ZERO_START_R_N;
             }
             else if (is_unsigned_suffix(buffer[i]))
             {
@@ -694,7 +680,7 @@ void numbers_identificator(char *buffer)
             i++;
             break;
         case S_S_L_SUFFIX_STATE:
-            // printf("Current state: S_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            // printf("Current state: S_S_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
@@ -705,7 +691,7 @@ void numbers_identificator(char *buffer)
             }
             else if (is_small_long_suffix(buffer[i]))
             {
-                curr_state = L_S_L_SUFFIX_STATE;
+                curr_state = S_L_L_SUFFIX_STATE;
             }
             else
             {
@@ -727,7 +713,7 @@ void numbers_identificator(char *buffer)
             }
             else if (is_capital_long_suffix(buffer[i]))
             {
-                curr_state = L_C_L_SUFFIX_STATE;
+                curr_state = S_L_L_SUFFIX_STATE;
             }
             else
             {
@@ -739,7 +725,6 @@ void numbers_identificator(char *buffer)
             break;
         case U_S_L_SUFFIX_STATE:
             // printf("Current state: U_S_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
-
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
@@ -766,7 +751,6 @@ void numbers_identificator(char *buffer)
             break;
         case U_C_L_SUFFIX_STATE:
             // printf("Current state: U_C_L_SUFFIX_STATE.\tCurrent char: %c\n", buffer[i]);
-
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
@@ -792,7 +776,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case L_S_L_SUFFIX_STATE:
-            // printf("Current state: L_S_LSUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            // printf("Current state: L_S_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
@@ -813,8 +797,27 @@ void numbers_identificator(char *buffer)
             i++;
 
             break;
+
+        case S_L_L_SUFFIX_STATE:
+            // printf("Current state: S_S_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            if (is_delimiter(buffer[i]))
+            {
+                curr_state = IN_WORD_STATE;
+            }
+            else if (buffer[i] == END_OF_BUFFER)
+            {
+                curr_state = END_STATE;
+            }
+            else
+            {
+                curr_state = ERROR_STATE;
+            }
+
+            i++;
+
+            break;
         case L_C_L_SUFFIX_STATE:
-            // printf("Current state: L_C_LSUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            // printf("Current state: L_C_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
@@ -850,14 +853,6 @@ void numbers_identificator(char *buffer)
             {
                 curr_state = OCTAL_STATE;
             }
-            else if (is_digit(buffer[i]))   // Implemented as (8, 9) in the state machine
-            {
-                curr_state = ZERO_START_R_N;
-            }
-            else if (is_exponent(buffer[i]))
-            {
-                curr_state = EXPONENT_STATE;
-            }
             else if (is_small_long_suffix(buffer[i]))
             {
                 curr_state = U_S_L_SUFFIX_STATE;
@@ -873,6 +868,26 @@ void numbers_identificator(char *buffer)
             else if (buffer[i] == END_OF_BUFFER)
             {
                 curr_state = END_STATE;
+            }
+            else
+            {
+                curr_state = ERROR_STATE;
+            }
+
+            i++;
+
+            break;
+
+        case HEX_PREFIX:
+            // printf("Current state: HEX_PREFIX.\t\tCurrent char: %c\n", buffer[i]);
+            if (is_hex_const(buffer[i]))
+            {
+                curr_state = HEX_STATE;
+            }
+            else if (buffer[i] == END_OF_BUFFER)
+            {
+                curr_state = END_STATE;
+                reset_type_count(); 
             }
             else
             {
@@ -981,45 +996,6 @@ void numbers_identificator(char *buffer)
             i++;
 
             break;
-        case ZERO_START_R_N:
-            // printf("Current state: ZERO_START_R_N.\t\tCurrent char: %c\n", buffer[i]);
-            nums_type_flags[INDEX_IS_OCTAL] = 0;
-            nums_type_flags[INDEX_IS_WHOLE_NUM] = 0;
-            nums_type_flags[INDEX_IS_U_WHOLE_NUM] = 0;
-            nums_type_flags[INDEX_IS_REAL_NUM] = 1;
-            
-            if(is_delimiter(buffer[i]))
-            {
-                curr_state = IN_WORD_STATE;
-
-                reset_type_count();
-            }
-            else if(is_exponent(buffer[i]))
-            {
-                curr_state = EXPONENT_STATE;
-            }
-            else if(buffer[i] = '.')
-            {
-                curr_state = FRAC_CONST_STATE;
-            }
-            else if(is_digit(buffer[i]))
-            {
-                curr_state = ZERO_START_R_N;
-            }
-            else if (buffer[i] == END_OF_BUFFER)
-            {
-                curr_state = END_STATE;
-
-                reset_type_count();
-            }
-            else
-            {
-                curr_state = ERROR_STATE;
-            }
-
-            i++;
-
-            break;
         case EXPONENT_STATE:
             // printf("Current state: EXPONENT_STATE.\t\tCurrent char: %c\n", buffer[i]);
             nums_type_flags[INDEX_IS_WHOLE_NUM] = 0;
@@ -1108,6 +1084,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case L_D_SUFFIX_STATE:
+            // printf("Current state: L_D_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
