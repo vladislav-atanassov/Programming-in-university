@@ -1,0 +1,32 @@
+============================================================================================================================================
+Rules algorithm:
+============================================================================================================================================
+- Removing the multiple spaces (reduce to one space)
+- Removing the spaces before ','
+- Removing the spaces before end of sentance chars
+
+============================================================================================================================================
+Potential problems:
+============================================================================================================================================
+- reading: "видях когато" - if inserting ", " it will result in: "видях,  когато" could be fixed one more call of removing multiple spaces
+
+============================================================================================================================================
+Notes:
+============================================================================================================================================
+- It will be good for a paragraph flag to be introduced
+- Using fread() and fwrite() with fixed 50 chars buffer
+- When a sentace is bigger than the buffer use malloc() -> realloc()
+
+- Every rule:
+-- is a function
+-- has a priority (one rule could override another)
+-- could be used more than once in the system
+
+- Hilighting the text good practice: printf("/33[%c\33[n", c) (ANSI escape chars opening and closing in the same printf())
+
+- Changing the codes from anything to UTF-8
+
+- There will be no test files (we have the edge cases so we write the tests ourselfs)
+
+============================================================================================================================================
+============================================================================================================================================
