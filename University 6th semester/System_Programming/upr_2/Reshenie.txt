@@ -2,9 +2,9 @@
 Rules algorithm:
 ============================================================================================================================================
 - Removing the multiple spaces (reduce to one space)
-- Removing the spaces before ','
-- Removing the spaces before end of sentance chars
-
+- Removing the spaces before the symbols ('-', ',' '.' '!' '?' ':' ';')
+- Removing the multiple symbols 
+- Removing the multiple spaces
 ============================================================================================================================================
 Potential problems:
 ============================================================================================================================================
