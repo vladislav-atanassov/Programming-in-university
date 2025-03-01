@@ -73,7 +73,7 @@ void reset_type_count()
     {
         nums_type_flags[i] = 0;
     }
-    
+
     return;
 }
 
@@ -488,6 +488,10 @@ void numbers_identificator(char *buffer)
             {
                 curr_state = F_SUFFIX_STATE;
             }
+            else if (is_long_suffix(buffer[i]))
+            {
+                curr_state = L_D_SUFFIX_STATE;
+            }
             else if (buffer[i] == END_OF_BUFFER)
             {
                 reset_type_count();
@@ -591,7 +595,7 @@ void numbers_identificator(char *buffer)
             // printf("Current state: N_S_INT_STATE.\t\tCurrent char: %c\n", buffer[i]);
             nums_type_flags[INDEX_IS_VALID_NUM] = 1;
             nums_type_flags[INDEX_IS_WHOLE_NUM] = 1;
-            
+
             if (is_delimiter(buffer[i]))
             {
                 curr_state = IN_WORD_STATE;
@@ -721,7 +725,8 @@ void numbers_identificator(char *buffer)
             }
 
             i++;
-
+// Za Valkata, 
+// Podpis: mhm
             break;
         case U_S_L_SUFFIX_STATE:
             // printf("Current state: U_S_L_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
@@ -887,7 +892,7 @@ void numbers_identificator(char *buffer)
             else if (buffer[i] == END_OF_BUFFER)
             {
                 curr_state = END_STATE;
-                reset_type_count(); 
+                reset_type_count();
             }
             else
             {
@@ -1168,3 +1173,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
