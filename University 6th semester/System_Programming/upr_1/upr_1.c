@@ -6,40 +6,43 @@
 #include <unistd.h>   // lseek()
 #include <errno.h>
 
-#define START_STATE 0
-#define IN_WORD_STATE 1
-#define ERROR_STATE -1
-#define END_STATE 29
-#define PLUS_SIGN_STATE 2
-#define MINUS_SIGN_STATE 3
-#define P_ZERO_STATE 4
-#define M_ZERO_STATE 5
-#define N_S_ZERO_STATE 6
-#define FRAC_CONST_STATE 7
-#define P_INT_STATE 8
-#define M_INT_STATE 9
-#define N_S_INT_STATE 10
-#define FIR_U_SUFFIX_STATE 11
-#define SEC_U_SUFFIX_STATE 12
-#define S_S_L_SUFFIX_STATE 13
-#define U_S_L_SUFFIX_STATE 14
-#define L_S_L_SUFFIX_STATE 15
-#define S_C_L_SUFFIX_STATE 16
-#define U_C_L_SUFFIX_STATE 17
-#define L_C_L_SUFFIX_STATE 18
-#define S_L_L_SUFFIX_STATE 71
-#define OCTAL_STATE 19
-#define HEX_PREFIX 72
-#define HEX_STATE 20
-#define DOUBLE_STATE 21
-#define F_SUFFIX_STATE 22
-#define EXPONENT_STATE 23
-#define S_EXPONENT_STATE 24
-#define F_NUM_SUFFIXES_STATE 25
-#define E_DOUBLE_STATE 26
-#define L_D_SUFFIX_STATE 27
-#define ZERO_START_R_N 28
-
+typedef enum States
+{
+    START_STATE = 0,
+    IN_WORD_STATE,
+    PLUS_SIGN_STATE,
+    MINUS_SIGN_STATE,
+    P_ZERO_STATE,
+    M_ZERO_STATE,
+    N_S_ZERO_STATE,
+    FRAC_CONST_STATE,
+    P_INT_STATE,
+    M_INT_STATE,
+    N_S_INT_STATE,
+    FIR_U_SUFFIX_STATE,
+    SEC_U_SUFFIX_STATE,
+    S_S_L_SUFFIX_STATE,
+    U_S_L_SUFFIX_STATE,
+    L_S_L_SUFFIX_STATE,
+    S_C_L_SUFFIX_STATE,
+    U_C_L_SUFFIX_STATE,
+    L_C_L_SUFFIX_STATE,
+    S_L_L_SUFFIX_STATE,
+    OCTAL_STATE,
+    HEX_PREFIX,
+    HEX_STATE,
+    DOUBLE_STATE,
+    F_SUFFIX_STATE,
+    EXPONENT_STATE,
+    S_EXPONENT_STATE,
+    F_NUM_SUFFIXES_STATE,
+    E_DOUBLE_STATE,
+    L_D_SUFFIX_STATE,
+    ZERO_START_R_N,
+    ERROR_STATE,
+    END_STATE
+} States;
+    
 #define END_OF_BUFFER '\0'
 
 #define SIZE_DELIMITERS 6
@@ -253,7 +256,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case ERROR_STATE:
-            // printf("Current state: ERROR_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            // printf("Current state: ERROR_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
             reset_type_count();
 
             if (is_delimiter(buffer[i]))
@@ -285,8 +288,8 @@ void numbers_identificator(char *buffer)
             printf("IS_HEXIDECIMAL:\t\t%d\n", nums_type_counters[INDEX_IS_HEXIDECIMAL]);
             printf("IS_FLOAT:\t\t%d\n", nums_type_counters[INDEX_IS_FLOAT]);
 
-            // printf("IS_ERROR:\t\t%d\n", errors);
-            // printf("TOTAL WORDS:\t\t%d\n", nums_type_counters[INDEX_IS_VALID_NUM] + errors);
+            printf("IS_ERROR:\t\t%d\n", errors);
+            printf("TOTAL WORDS:\t\t%d\n", nums_type_counters[INDEX_IS_VALID_NUM] + errors);
 
             return;
 
@@ -329,6 +332,11 @@ void numbers_identificator(char *buffer)
             else if (buffer[i] == '.')
             {
                 curr_state = FRAC_CONST_STATE;
+            }
+            else if(is_delimiter(buffer[i]))
+            {
+                reset_type_count();
+                curr_state = IN_WORD_STATE;
             }
             else
             {
@@ -637,7 +645,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case FIR_U_SUFFIX_STATE:
-            // printf("Current state: FIR_U_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            printf("Current state: FIR_U_SUFFIX_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
             nums_type_flags[INDEX_IS_U_WHOLE_NUM] = 1;
 
             if (is_small_long_suffix(buffer[i]))
@@ -665,7 +673,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case SEC_U_SUFFIX_STATE:
-            // printf("Current state: SEC_U_SUFFIX_STATE.\t\tCurrent char: %c\n", buffer[i]);
+            printf("Current state: SEC_U_SUFFIX_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
             nums_type_flags[INDEX_IS_U_WHOLE_NUM] = 1;
 
             if (is_delimiter(buffer[i]))
@@ -1173,4 +1181,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
