@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "*.asm": "m6800-as0",
+        "shm.h": "c",
+        "types.h": "c",
+        "wait.h": "c",
+        "string.h": "c",
+        "cmath": "c",
+        "ioctl.h": "c",
+        "signal.h": "c",
+        "select.h": "c",
+        "unistd.h": "c",
+        "ipc.h": "c",
+        "stdio.h": "c",
+        "msg.h": "c"
+    }
+}

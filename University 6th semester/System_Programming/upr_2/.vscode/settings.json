@@ -64,6 +64,13 @@
     "stdlib.h": "c",
     "stdio.h": "c",
     "grammar_correction.h": "c",
-    "read_convert_file.h": "c"
+    "read_convert_file.h": "c",
+    "colouring.h": "c",
+    "compare": "c",
+    "type_traits": "c",
+    "limits.h": "c",
+    "cstring": "c",
+    "dictionary.h": "c",
+    "locale.h": "c"
   }
 }

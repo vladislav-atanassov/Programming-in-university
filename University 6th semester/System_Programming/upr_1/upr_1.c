@@ -288,8 +288,8 @@ void numbers_identificator(char *buffer)
             printf("IS_HEXIDECIMAL:\t\t%d\n", nums_type_counters[INDEX_IS_HEXIDECIMAL]);
             printf("IS_FLOAT:\t\t%d\n", nums_type_counters[INDEX_IS_FLOAT]);
 
-            printf("IS_ERROR:\t\t%d\n", errors);
-            printf("TOTAL WORDS:\t\t%d\n", nums_type_counters[INDEX_IS_VALID_NUM] + errors);
+            // printf("IS_ERROR:\t\t%d\n", errors);
+            // printf("TOTAL WORDS:\t\t%d\n", nums_type_counters[INDEX_IS_VALID_NUM] + errors);
 
             return;
 
@@ -645,7 +645,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case FIR_U_SUFFIX_STATE:
-            printf("Current state: FIR_U_SUFFIX_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
+            // printf("Current state: FIR_U_SUFFIX_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
             nums_type_flags[INDEX_IS_U_WHOLE_NUM] = 1;
 
             if (is_small_long_suffix(buffer[i]))
@@ -673,7 +673,7 @@ void numbers_identificator(char *buffer)
 
             break;
         case SEC_U_SUFFIX_STATE:
-            printf("Current state: SEC_U_SUFFIX_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
+            // printf("Current state: SEC_U_SUFFIX_STATE.\t\tCurrent char: %c at %d\n", buffer[i], i);
             nums_type_flags[INDEX_IS_U_WHOLE_NUM] = 1;
 
             if (is_delimiter(buffer[i]))

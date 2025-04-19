@@ -1,22 +1,18 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <iconv.h>  // open()
-#include <unistd.h> // lseek(), close()
-#include <fcntl.h>
 
 #include "read_convert_file.h"
 #include "grammar_correction.h"
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
+    if (argc < 3)
     {
         fprintf(stderr, "Usage: %s <utf8_input_file>\n", argv[0]);
         return 1;
     }
 
     const char *input_filename = argv[1];
+    const char *output_filename = argv[2];
     const char *temp_filename = "temp_single_byte.txt";
 
     size_t buffer_size = 0;
@@ -30,7 +26,7 @@ int main(int argc, char *argv[])
     }
 
     printf("Processed output:\n");
-    process_temp_file(temp_filename);
+    process_temp_file(temp_filename, output_filename);
     printf("\n");
 
     return 0;
