@@ -1,0 +1,41 @@
+Processor: 12th Gen Intel(R) Core(TM) i7-1255U
+L1 cache: 928 KB
+L2 cache: 6.5 MB
+L3 cache: 12.0 MB
+
+g++ -std=c++17 -O2 main_template.cpp mm_mult_template.cpp -march=native -fopenmp -o ex2
+./ex2 1024 4
+
+MATRIX MULTIPLICATION PERFORMANCE TEST
+======================================
+Matrix size: 1024x1024
+Default threads: 4
+Available processors: 12
+
+============================================================
+SEQUENTIAL OPTIMIZATIONS
+============================================================
+Matrix size: 1024x1024
+Method                   | Time (ms) | Speedup | Correct?
+-------------------------|-----------|---------|----------
+Baseline                 | 1516      | 1.00    | Yes
+Loop Interchange         | 416       | 3.64    | Yes
+Tiling (16)              | 442       | 3.43    | Yes
+Tiling (32)              | 391       | 3.88    | Yes
+Tiling (64)              | 379       | 4.00    | Yes
+Vectorized               | 239       | 6.34    | Yes
+SoA Layout               | 531       | 2.85    | Yes
+SoA + Vectorized         | 871       | 1.74    | Yes
+Sequential tests pending implementation...
+
+============================================================
+PARALLEL OPTIMIZATIONS
+============================================================
+Threads: 4
+Method                   | Time (ms) | Speedup | Correct?
+-------------------------|-----------|---------|----------
+Parallel                 | 148       | 9.76    | Yes
+Hybrid (Tiling+Parallel) | 250       | 5.78    | Yes
+Parallel tests pending implementation...
+
+=== PERFORMANCE SUMMARY ===
