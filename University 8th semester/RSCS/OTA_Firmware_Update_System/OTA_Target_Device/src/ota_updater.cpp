@@ -43,7 +43,7 @@ static bool https_stream_download(const String &url, size_t expected_size,
   }
 
   WiFiClient *stream = http.getStreamPtr();
-  uint8_t buf[CHUNK_SIZE];
+  static uint8_t buf[CHUNK_SIZE]; // static to avoid stack overflow
   size_t totalRead = 0;
 
   while (http.connected() && totalRead < expected_size) {
@@ -173,7 +173,7 @@ bool ota_perform_update(const FirmwareManifest &manifest) {
   }
 
   // Stream download → decrypt → OTA write
-  uint8_t decrypt_buf[CHUNK_SIZE];
+  static uint8_t decrypt_buf[CHUNK_SIZE]; // static to avoid stack overflow
   bool flash_ok = https_stream_download(
       manifest.firmware_url, manifest.firmware_size,
       [&](const uint8_t *buf, size_t len) -> bool {
