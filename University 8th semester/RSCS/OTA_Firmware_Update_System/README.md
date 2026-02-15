@@ -5,45 +5,45 @@ A secure Over-The-Air firmware update system for ESP32-C3. The device downloads 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────┐
-│                  SERVER (Python)                │
-│                                                 │
-│  firmware.bin                                   │
-│       │                                         │
-│       ▼                                         │
-│  AES-256-GCM encrypt (random IV)                │
-│       │                                         │
-│       ▼                                         │
-│  ECDSA-P256 sign (IV + ciphertext + version)    │
-│       │                                         │
-│       ▼                                         │
-│  Upload to GitHub Releases                      │
-│  (firmware.bin.enc + manifest.json)             │
-└───────────────────────┬─────────────────────────┘
-                        │ HTTPS
-┌───────────────────────▼─────────────────────────┐
-│                  ESP32-C3                       │
-│                                                 │
-│  Download manifest.json                         │
-│       │                                         │
-│       ▼                                         │
-│  Check version (anti-rollback)                  │
-│       │                                         │
-│       ▼                                         │
-│  Download firmware.bin.enc                      │
-│       │                                         │
-│       ▼                                         │
-│  Verify ECDSA-P256 signature                    │
-│       │                                         │
-│       ▼                                         │
-│  Decrypt AES-256-GCM                            │
-│       │                                         │
-│       ▼                                         │
-│  Install via OTA API (inactive partition)       │
-│       │                                         │
-│       ▼                                         │
-│  Reboot                                         │
-└─────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────┐
+│                  SERVER (Python)              │
+│                                               │
+│                  firmware.bin                 │
+│                      │                        │
+│                      ▼                        │
+│         AES-256-GCM encrypt (random IV)       │
+│                      │                        │
+│                      ▼                        │
+│  ECDSA-P256 sign (IV + ciphertext + version)  │
+│                      │                        │
+│                      ▼                        │
+│           Upload to GitHub Releases           │
+│      (firmware.bin.enc + manifest.json)       │
+└──────────────────────┬────────────────────────┘
+                       │ HTTPS
+┌──────────────────────▼────────────────────────┐
+│                   ESP32-C3                    │
+│                                               │
+│            Download manifest.json             │
+│                      │                        │
+│                      ▼                        │
+│         Check version (anti-rollback)         │
+│                      │                        │
+│                      ▼                        │
+│            Download firmware.bin.enc          │
+│                      │                        │
+│                      ▼                        │
+│          Verify ECDSA-P256 signature          │
+│                      │                        │
+│                      ▼                        │
+│             Decrypt AES-256-GCM               │
+│                      │                        │
+│                      ▼                        │
+│   Install via OTA API (inactive partition)    │
+│                      │                        │
+│                      ▼                        │
+│                   Reboot                      │
+└───────────────────────────────────────────────┘
 ```
 
 ## Security Features
@@ -70,13 +70,13 @@ A secure Over-The-Air firmware update system for ESP32-C3. The device downloads 
 
 ```
 OTA_Firmware_Update_System/
-├── OTA_Target_Device/            # ESP32 firmware (PlatformIO)
+├── OTA_Target_Device/              # ESP32 firmware (PlatformIO)
 │   ├── include/
-│   │   ├── config.example.h      # Template (copy to config.h)
-│   │   ├── config.h              # WiFi + crypto keys (gitignored)
-│   │   ├── version.h             # Firmware version
+│   │   ├── config.example.h        # Template (copy to config.h)
+│   │   ├── config.h                # WiFi + crypto keys (gitignored)
+│   │   ├── version.h               # Firmware version
 │   │   ├── wifi_manager.h
-│   │   ├── crypto.h              # Streaming ECDSA + AES-GCM
+│   │   ├── crypto.h                # Streaming ECDSA + AES-GCM
 │   │   ├── manifest.h
 │   │   └── ota_updater.h
 │   ├── src/
@@ -85,28 +85,40 @@ OTA_Firmware_Update_System/
 │   │   ├── crypto.cpp
 │   │   ├── manifest.cpp
 │   │   └── ota_updater.cpp
-│   ├── partitions.csv            # Dual OTA partition layout
+│   ├── partitions.csv              # Dual OTA partition layout
 │   └── platformio.ini
-├── tools/                        # Server-side Python scripts
-│   ├── generate_keys.py          # Generate ECDSA + AES keys
-│   ├── prepare_firmware.py       # Encrypt + sign + manifest
+├── tools/                          # Server-side Python scripts
+│   ├── generated/                  # Keys + build artifacts (gitignored)
+│   │   ├── .gitkeep                # Keeps directory in repo
+│   │   ├── signing_key.pem         # ECDSA private key (secret)
+│   │   ├── aes_key.bin             # AES-256 key (secret)
+│   │   ├── public_key.pem          # ECDSA public key
+│   │   └── firmware.bin.enc        # Encrypted firmware (for upload)
+│   ├── generate_keys.py            # Generate ECDSA + AES keys
+│   ├── prepare_firmware.py         # Build + encrypt + sign + manifest
 │   └── requirements.txt
+├── manifest.json                   # OTA manifest (committed to repo)
 └── README.md
 ```
 
 ## Quick Start
 
-### 1. Generate Cryptographic Keys
+### 1. Install Python Dependencies
 
 ```bash
 cd tools
 pip install -r requirements.txt
+```
+
+### 2. Generate Cryptographic Keys (one-time)
+
+```bash
 python generate_keys.py
 ```
 
-This creates `signing_key.pem`, `public_key.pem`, and `aes_key.bin`, and prints C byte arrays to paste into `config.h`.
+This creates keys in `tools/generated/` and prints C byte arrays to paste into `config.h`.
 
-### 2. Configure the ESP32
+### 3. Configure the ESP32
 
 ```bash
 cd OTA_Target_Device
@@ -116,27 +128,42 @@ copy include\config.example.h include\config.h
 Edit `include/config.h`:
 - Set `WIFI_SSID` and `WIFI_PASSWORD`
 - Set `MANIFEST_URL` to your GitHub-hosted manifest URL
-- Paste the AES key and ECDSA public key arrays from step 1
+- Paste the AES key and ECDSA public key arrays from step 2
 
-### 3. Build and Flash
+### 4. Build and Flash (initial)
 
 ```bash
-C:\Users\VladislavAtanassov\.platformio\penv\Scripts\platformio.exe run
-C:\Users\VladislavAtanassov\.platformio\penv\Scripts\platformio.exe run --target upload
-C:\Users\VladislavAtanassov\.platformio\penv\Scripts\platformio.exe device monitor
+pio run --target upload
+pio device monitor
 ```
 
-### 4. Publish an OTA Update
+### 5. Publish an OTA Update
 
-After making firmware changes, bump the version in `version.h`, rebuild, then:
+After making firmware changes, bump the version in `include/version.h`, then run a single command:
 
 ```bash
 cd tools
-python prepare_firmware.py --version 10100 \
-    --firmware-url https://github.com/USER/REPO/releases/download/v1.1.0/firmware.bin.enc
+python prepare_firmware.py
 ```
 
-Upload `firmware.bin.enc` and `manifest.json` to a GitHub Release (or host `manifest.json` on GitHub Pages).
+This automatically:
+1. Reads the version from `version.h`
+2. **Aborts if the version hasn't been bumped** (devices would reject a same-or-older version)
+3. Builds the firmware via PlatformIO
+4. Encrypts with AES-256-GCM
+5. Signs with ECDSA-P256
+6. Outputs `firmware.bin.enc` to `tools/generated/`
+7. Outputs `manifest.json` to the project root
+
+Then publish to GitHub:
+1. Commit and push `manifest.json`
+2. Create a GitHub Release (e.g. `v1.2.0`) and upload `tools/generated/firmware.bin.enc`
+
+> **Important:** `manifest.json` and `firmware.bin.enc` are a matched pair — they must come from the same run of `prepare_firmware.py`.
+
+Options:
+- `--skip-build` — skip the PlatformIO build step (use existing binary)
+- `--repo user/repo` — override the GitHub repository for the download URL
 
 ## Manifest Format
 
@@ -151,12 +178,23 @@ Upload `firmware.bin.enc` and `manifest.json` to a GitHub Release (or host `mani
 }
 ```
 
-## OTA Update Flow (Detailed)
+## OTA Update Flow
 
-1. **Manifest fetch** — ESP32 fetches `manifest.json` over HTTPS
+1. **Manifest fetch** — ESP32 fetches `manifest.json` over HTTPS every 60 seconds
 2. **Version check** — Compares `manifest.version` against `FIRMWARE_VERSION`. Skips if not newer (anti-rollback).
 3. **Pass 1 (signature verification)** — Streams the encrypted firmware while computing `SHA-256(IV || ciphertext || version_bytes)`. Verifies the ECDSA-P256 signature. **Aborts if invalid** — nothing is written to flash.
 4. **Pass 2 (decrypt + flash)** — Re-downloads the firmware, decrypts each chunk with AES-256-GCM, and writes to the inactive OTA partition.
 5. **GCM tag check** — Verifies the authentication tag. Aborts without activating if mismatched.
 6. **Activate + reboot** — Sets the new partition as the boot target and reboots.
 7. **Self-validation** — On first boot, new firmware calls `esp_ota_mark_app_valid_cancel_rollback()`. If it crashes before this call, the bootloader automatically rolls back.
+
+## Version Encoding
+
+Versions are encoded as integers for comparison: `MAJOR * 10000 + MINOR * 100 + PATCH`
+
+| Version | Code |
+|---------|------|
+| v1.0.0 | 10000 |
+| v1.1.0 | 10100 |
+| v1.2.3 | 10203 |
+| v2.0.0 | 20000 |

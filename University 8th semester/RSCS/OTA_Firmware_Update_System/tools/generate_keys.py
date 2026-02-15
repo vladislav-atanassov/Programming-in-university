@@ -17,7 +17,8 @@ from cryptography.hazmat.primitives import serialization
 
 
 def main():
-    out_dir = os.path.dirname(os.path.abspath(__file__))
+    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "generated")
+    os.makedirs(out_dir, exist_ok=True)
 
     # -----------------------------------------------------------------
     # 1. Generate ECDSA P-256 key pair
