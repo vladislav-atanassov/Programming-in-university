@@ -6,7 +6,7 @@ A secure Over-The-Air firmware update system for ESP32-C3. The device downloads 
 
 ```
 ┌───────────────────────────────────────────────┐
-│                  SERVER (Python)              │
+│                 SERVER (Python)               │
 │                                               │
 │                  firmware.bin                 │
 │                      │                        │
@@ -118,6 +118,9 @@ python generate_keys.py
 
 This creates keys in `tools/generated/` and prints C byte arrays to paste into `config.h`.
 
+> [!CAUTION]
+> Never commit `signing_key.pem` or `aes_key.bin` to version control. The `tools/generated/` directory is gitignored for this reason.
+
 ### 3. Configure the ESP32
 
 ```bash
@@ -139,6 +142,9 @@ pio device monitor
 
 ### 5. Publish an OTA Update
 
+> [!NOTE]
+> You must bump the version in `include/version.h` before preparing a release. The script will abort if the version hasn't changed.
+
 After making firmware changes, bump the version in `include/version.h`, then run a single command:
 
 ```bash
@@ -159,7 +165,8 @@ Then publish to GitHub:
 1. Commit and push `manifest.json`
 2. Create a GitHub Release (e.g. `v1.2.0`) and upload `tools/generated/firmware.bin.enc`
 
-> **Important:** `manifest.json` and `firmware.bin.enc` are a matched pair — they must come from the same run of `prepare_firmware.py`.
+> [!IMPORTANT]
+> `manifest.json` and `firmware.bin.enc` are a matched pair — they must come from the same run of `prepare_firmware.py`.
 
 Options:
 - `--skip-build` — skip the PlatformIO build step (use existing binary)
@@ -187,6 +194,9 @@ Options:
 5. **GCM tag check** — Verifies the authentication tag. Aborts without activating if mismatched.
 6. **Activate + reboot** — Sets the new partition as the boot target and reboots.
 7. **Self-validation** — On first boot, new firmware calls `esp_ota_mark_app_valid_cancel_rollback()`. If it crashes before this call, the bootloader automatically rolls back.
+
+> [!NOTE]
+> Power loss during an update is safe — the boot partition only switches after all verification passes. The device will reboot into the previous firmware.
 
 ## Version Encoding
 
