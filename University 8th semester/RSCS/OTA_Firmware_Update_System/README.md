@@ -71,20 +71,27 @@ A secure Over-The-Air firmware update system for ESP32-C3. The device downloads 
 ```
 OTA_Firmware_Update_System/
 ├── OTA_Target_Device/              # ESP32 firmware (PlatformIO)
-│   ├── include/
+│   ├── config/
 │   │   ├── config.example.h        # Template (copy to config.h)
 │   │   ├── config.h                # WiFi + crypto keys (gitignored)
-│   │   ├── version.h               # Firmware version
-│   │   ├── wifi_manager.h
-│   │   ├── crypto.h                # Streaming ECDSA + AES-GCM
-│   │   ├── manifest.h
-│   │   └── ota_updater.h
-│   ├── src/
-│   │   ├── main.cpp
-│   │   ├── wifi_manager.cpp
-│   │   ├── crypto.cpp
-│   │   ├── manifest.cpp
-│   │   └── ota_updater.cpp
+│   │   └── version.h               # Firmware version
+│   ├── services/
+│   │   ├── crypto/
+│   │   │   ├── CryptoService.h     # Streaming ECDSA + AES-GCM
+│   │   │   └── CryptoService.cpp
+│   │   ├── manifest/
+│   │   │   ├── ManifestFetcher.h   # Manifest download + parse
+│   │   │   └── ManifestFetcher.cpp
+│   │   ├── network/
+│   │   │   ├── WifiManager.h       # WiFi connectivity
+│   │   │   └── WifiManager.cpp
+│   │   └── ota/
+│   │       ├── OTAUpdateService.h  # OTA update orchestrator
+│   │       └── OTAUpdateService.cpp
+│   ├── app/
+│   │   ├── Application.h           # User application interface
+│   │   └── Application.cpp         # User firmware code goes here
+│   ├── main.cpp                    # Thin entry point
 │   ├── partitions.csv              # Dual OTA partition layout
 │   └── platformio.ini
 ├── tools/                          # Server-side Python scripts
@@ -99,6 +106,20 @@ OTA_Firmware_Update_System/
 │   └── requirements.txt
 ├── manifest.json                   # OTA manifest (committed to repo)
 └── README.md
+```
+
+### Class Architecture
+
+```
+main.cpp
+  ├── WifiManager         — WiFi connection management
+  ├── ManifestFetcher     — Downloads + parses firmware manifests
+  ├── CryptoService       — SHA-256/ECDSA verification + AES-GCM decryption
+  ├── OTAUpdateService    — Orchestrates the full OTA pipeline
+  │     ├── uses WifiManager
+  │     ├── uses ManifestFetcher
+  │     └── uses CryptoService
+  └── Application         — User firmware code (edit app/Application.cpp)
 ```
 
 ## Quick Start
@@ -125,27 +146,31 @@ This creates keys in `tools/generated/` and prints C byte arrays to paste into `
 
 ```bash
 cd OTA_Target_Device
-copy include\config.example.h include\config.h
+copy config\config.example.h config\config.h
 ```
 
-Edit `include/config.h`:
+Edit `config/config.h`:
 - Set `WIFI_SSID` and `WIFI_PASSWORD`
 - Set `MANIFEST_URL` to your GitHub-hosted manifest URL
 - Paste the AES key and ECDSA public key arrays from step 2
 
-### 4. Build and Flash (initial)
+### 4. Write Your Application Code
+
+Edit `app/Application.cpp` to implement your firmware logic. The `setup()` method is called once after initialization, and `loop()` is called every iteration alongside the OTA update service.
+
+### 5. Build and Flash (initial)
 
 ```bash
 pio run --target upload
 pio device monitor
 ```
 
-### 5. Publish an OTA Update
+### 6. Publish an OTA Update
 
 > [!NOTE]
-> You must bump the version in `include/version.h` before preparing a release. The script will abort if the version hasn't changed.
+> You must bump the version in `config/version.h` before preparing a release. The script will abort if the version hasn't changed.
 
-After making firmware changes, bump the version in `include/version.h`, then run a single command:
+After making firmware changes, bump the version in `config/version.h`, then run a single command:
 
 ```bash
 cd tools

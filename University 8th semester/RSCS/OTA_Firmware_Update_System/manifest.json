@@ -1,8 +1,8 @@
 {
-  "version": 10100,
-  "firmware_url": "https://github.com/vladislav-atanassov/Programming-in-university/releases/download/v1.1.0/firmware.bin.enc",
-  "iv": "mnXOfIxc0AYVohuD",
-  "tag": "aZItQa8tZ2ak/6uPaRHavw==",
-  "signature": "MEUCIQC8TLKceyhLXcYftTU8as3VJyttT7vjn5ZN6sCK4t28UwIgQ4n5oIa3ybhgrpyQYWpqW3xPpMygX8GIMDv3ASxPsqw=",
-  "size": 915232
+  "version": 20000,
+  "firmware_url": "https://github.com/vladislav-atanassov/Programming-in-university/releases/download/v2.0.0/firmware.bin.enc",
+  "iv": "ZLtqd/1WHzFBfqRd",
+  "tag": "GlVy0WKtfJbneQOnuMgtyw==",
+  "signature": "MEUCIQDyxULHnHr/nPa0eARAHWMVkVWmsflztv28lsVasknC0QIgZbCZiTBZMM88WAAsqTFsbpc+8w3ougSc5JP9RhLK76U=",
+  "size": 915840
 }

@@ -65,7 +65,7 @@ def main():
     # -----------------------------------------------------------------
     print()
     print("=" * 60)
-    print("  Paste the following into include/config.h")
+    print("  Paste the following into config/config.h")
     print("=" * 60)
     print()
 

@@ -42,7 +42,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.normpath(os.path.join(SCRIPT_DIR, ".."))
 DEVICE_DIR = os.path.join(PROJECT_ROOT, "OTA_Target_Device")
 
-VERSION_H = os.path.join(DEVICE_DIR, "include", "version.h")
+VERSION_H = os.path.join(DEVICE_DIR, "config", "version.h")
 FIRMWARE_BIN = os.path.join(
     DEVICE_DIR, ".pio", "build", "seeed_xiao_esp32c3", "firmware.bin"
 )
